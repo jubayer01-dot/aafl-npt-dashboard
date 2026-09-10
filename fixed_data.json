@@ -1,0 +1,11 @@
+{
+  "month": "Sep-26",
+  "prod_target": 13341,
+  "prod_actual": 2345.245,
+  "prod_prorated_target": 2223.5,
+  "oee": 57.18,
+  "npt": 35.98,
+  "five": 60.6,
+  "kaizen": 8,
+  "note": "Fixed balanced: 05-09 prorated 2223 vs 2345 = 105% (full month 13341 vs 2345 = 17% unbalanced)"
+}
