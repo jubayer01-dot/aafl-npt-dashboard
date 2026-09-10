@@ -1,0 +1,75 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>AAFL Minimal - Daily NPT</title>
+<style>body{font-family:Segoe UI,sans-serif;background:#0f172a;color:#e2e8f0;padding:20px}select,input,button{padding:8px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0}table{width:100%;border-collapse:collapse;margin-top:10px}th,td{padding:6px 8px;border-bottom:1px solid #334155;text-align:left;font-size:13px}th{color:#94a3b8;font-size:11px;text-transform:uppercase}.card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:12px;margin-bottom:12px}</style>
+</head><body>
+<h2>AAFL — Daily Line-wise NPT (Minimal - Guaranteed Load)</h2>
+<div id="stamp" style="color:#94a3b8;font-size:12px">Loading...</div>
+<div style="margin:12px 0">
+  <label>Date: <select id="dateSel"></select></label>
+  <input type="date" id="dateInput">
+  <button onclick="prev()">Prev</button><button onclick="next()">Next</button>
+  <span id="err" style="color:#f87171;margin-left:10px"></span>
+</div>
+
+<div class="card"><b id="kpi"></b><div id="kpi2" style="color:#94a3b8;font-size:12px"></div></div>
+
+<h3>Line-wise</h3><table><thead><tr><th>Line</th><th>Prod MT</th><th>NPT min</th><th>Freq</th><th>Loss MT</th></tr></thead><tbody id="lineBody"></tbody></table>
+
+<h3>Type-wise</h3><table><thead><tr><th>Type</th><th>Time</th><th>Freq</th><th>Loss MT</th></tr></thead><tbody id="typeBody"></tbody></table>
+
+<h3>Top 3 Reasons</h3><table><thead><tr><th>#</th><th>Name + Reason</th><th>Type</th><th>Time</th><th>Loss</th></tr></thead><tbody id="top3Body"></tbody></table>
+
+<h3>RM Shortage — All Reasons</h3><table><thead><tr><th>#</th><th>RM Reason</th><th>Time</th><th>Loss</th></tr></thead><tbody id="rmBody"></tbody></table>
+
+<h3>Monthly Trend (last 6 months)</h3><div id="monthly" style="font-size:12px"></div>
+
+<script>
+let DATA=null;
+function fmt(n){return n==null?'--':Number(n).toLocaleString(undefined,{maximumFractionDigits:2})}
+async function load(){
+  try{
+    const r=await fetch('npt_line_data.json?_='+Date.now());
+    if(!r.ok) throw new Error('http '+r.status);
+    DATA=await r.json();
+  }catch(e){
+    document.getElementById('err').textContent='Fetch failed '+e+', trying offline...';
+    // if offline html, EMBEDDED_DATA would be defined, but minimal has no embedded - just show error
+    return;
+  }
+  document.getElementById('stamp').textContent='Generated '+DATA.generated+' · '+DATA.daily.length+' days';
+  const sel=document.getElementById('dateSel');
+  sel.innerHTML='';
+  DATA.all_dates.forEach(d=> sel.add(new Option(d,d)));
+  sel.value=DATA.all_dates[DATA.all_dates.length-1];
+  document.getElementById('dateInput').value=sel.value;
+  sel.onchange=()=>{ document.getElementById('dateInput').value=sel.value; render(); };
+  document.getElementById('dateInput').onchange=(e)=>{ sel.value=e.target.value; render(); };
+  render();
+  // monthly
+  let mhtml='<table><tr><th>Month</th><th>Total NPT</th><th>Loss MT</th></tr>';
+  DATA.monthly.slice(-6).forEach(m=>{ mhtml+=`<tr><td>${m.month}</td><td>${fmt(m.total_npt)}</td><td>${fmt(m.total_loss)}</td></tr>`; });
+  mhtml+='</table>';
+  document.getElementById('monthly').innerHTML=mhtml;
+}
+function render(){
+  const sel=document.getElementById('dateSel').value;
+  const rec=DATA.daily.find(d=>d.date===sel);
+  if(!rec){ document.getElementById('err').textContent='No data'; return; }
+  document.getElementById('kpi').textContent= sel+' — Prod '+fmt(rec.total_prod)+' MT | NPT '+fmt(rec.total_npt)+' min ('+rec.total_freq+' events) | Loss '+fmt(rec.total_loss)+' MT';
+  document.getElementById('kpi2').textContent='Breakdown '+fmt(rec.split.breakdown_time)+' min / Downtime '+fmt(rec.split.downtime_time)+' min';
+  let rows=''; ['Cattle Line','Fish Line (Floating)','Fish Line (Sinking)','Layer Line','Poultry Line'].forEach(l=>{
+    const x=rec.lines[l]||{prod:0,npt_time:0,npt_freq:0,loss_mt:0};
+    rows+=`<tr><td>${l}</td><td>${fmt(x.prod)}</td><td>${fmt(x.npt_time)}</td><td>${x.npt_freq}</td><td>${fmt(x.loss_mt)}</td></tr>`;
+  });
+  document.getElementById('lineBody').innerHTML=rows;
+  let trows=''; Object.entries(rec.types).sort((a,b)=>b[1].time-a[1].time).forEach(([k,v])=>{ trows+=`<tr><td>${k}</td><td>${fmt(v.time)}</td><td>${v.freq}</td><td>${fmt(v.loss_mt)}</td></tr>`; });
+  document.getElementById('typeBody').innerHTML=trows||'<tr><td colspan=4>No NPT</td></tr>';
+  let top3=''; (rec.top3||[]).forEach((r,i)=>{ top3+=`<tr><td>${i+1}</td><td><b>${r.name}</b><br><span style="color:#94a3b8">${r.reason||''}</span></td><td>${r.type}</td><td>${fmt(r.time)}</td><td>${fmt(r.loss_mt)}</td></tr>`; });
+  document.getElementById('top3Body').innerHTML=top3||'<tr><td colspan=5>No data</td></tr>';
+  let rm=''; (rec.rm_reasons||[]).forEach((r,i)=>{ rm+=`<tr><td>${i+1}</td><td><b>${r.name}</b><br><span style="color:#94a3b8">${r.reason||''}</span></td><td>${fmt(r.time)}</td><td>${fmt(r.loss_mt)}</td></tr>`; });
+  document.getElementById('rmBody').innerHTML=rm||'<tr><td colspan=4>No RM Shortage ✓</td></tr>';
+}
+function prev(){ const s=document.getElementById('dateSel'); if(s.selectedIndex>0){s.selectedIndex--; document.getElementById('dateInput').value=s.value; render();} }
+function next(){ const s=document.getElementById('dateSel'); if(s.selectedIndex < s.options.length-1){s.selectedIndex++; document.getElementById('dateInput').value=s.value; render();} }
+load();
+</script>
+</body></html>

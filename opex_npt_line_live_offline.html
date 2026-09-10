@@ -1,0 +1,143 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AAFL — Daily Line-wise NPT FULL (Fixed)</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--card2:#2a3a56;--line:#3b4f6b;--txt:#f1f5f9;--mut:#cbd5e1;--blue:#38bdf8;--green:#34d399;--amber:#fbbf24;--red:#f87171;--violet:#a78bfa;--teal:#2dd4bf}
+*{margin:0;padding:0;box-sizing:border-box} body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--txt);padding:20px}
+.header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.header h1{font-size:22px;font-weight:700}.header h1 span{color:var(--blue)} .header .sub{color:var(--mut);font-size:13px;margin-top:4px}
+.stamp{color:var(--mut);font-size:12px;text-align:right} .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid #0b6b50;background:#063b2e;color:var(--green)}
+.filterbar{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:16px;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+.fgroup{display:flex;flex-direction:column;gap:4px} .filterbar label{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.7px;font-weight:600}
+.filterbar select,.filterbar input[type=date]{background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;min-width:160px;outline:none}
+.btn{background:var(--card2);color:var(--txt);border:1px solid var(--line);padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer}
+.btn.primary{background:#123047;color:var(--blue);border-color:#1e4a66}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.card .lbl{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.7px;font-weight:600}
+.card .val{font-size:22px;font-weight:700;margin-top:6px} .card .sub2{font-size:12px;color:var(--mut);margin-top:4px}
+.c-blue{color:var(--blue)}.c-green{color:var(--green)}.c-amber{color:var(--amber)}.c-red{color:var(--red)}.c-violet{color:var(--violet)}.c-teal{color:var(--teal)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:14px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.panel h3{font-size:13px;font-weight:700;margin-bottom:2px} .panel .desc{font-size:12px;color:var(--mut);margin-bottom:10px}
+.chart{position:relative;height:260px} .chart.sm{height:230px}
+table.k{width:100%;border-collapse:collapse;font-size:12px} table.k th,table.k td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}
+table.k th{color:#e2e8f0;background:rgba(255,255,255,.06);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.pill{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:600}
+.pill.bd{background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+.pill.dt{background:rgba(56,189,248,.12);color:var(--blue);border:1px solid rgba(56,189,248,.3)}
+.footer{color:var(--mut);font-size:11px;text-align:center;margin-top:18px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}}
+</style></head><body>
+<div class="header"><div><h1>Akij Agro Feed Ltd — <span>Daily Line-wise Production & NPT</span></h1><div class="sub">Daily Production · NPT Time · Loss MT by SMV · Breakdown vs Downtime · Pareto · Top3 · RM · Monthly</div><div style="margin-top:8px"><span class="badge">● LIVE</span> <span style="font-size:12px;color:var(--mut);margin-left:8px" id="genStamp">Loading...</span></div></div><div class="stamp"><div id="rangeLbl" style="color:var(--green);font-size:12px"></div><div id="err" style="color:var(--red);font-size:12px"></div></div></div>
+
+<div class="filterbar">
+  <div class="fgroup"><label>Select Date (Filter)</label><select id="dateSel"></select></div>
+  <div class="fgroup"><label>Calendar</label><input type="date" id="dateInput"></div>
+  <button class="btn" onclick="prev()">◀ Prev</button><button class="btn" onclick="next()">Next ▶</button><button class="btn primary" onclick="today()">Today</button>
+  <div style="margin-left:auto;font-size:12px;color:var(--mut)">Loss MT = NPT × MT/Hour ÷ 60</div>
+</div>
+
+<div class="cards">
+  <div class="card"><div class="lbl">Total Production</div><div class="val c-green" id="kProd">--</div><div class="sub2" id="kProdSub"></div></div>
+  <div class="card"><div class="lbl">Total NPT</div><div class="val c-red" id="kNPT">--</div><div class="sub2" id="kNPTSub"></div></div>
+  <div class="card"><div class="lbl">Loss MT (by SMV)</div><div class="val c-amber" id="kLoss">--</div><div class="sub2" id="kLossSub"></div></div>
+  <div class="card"><div class="lbl">Breakdown / Downtime</div><div class="val" style="font-size:16px" id="kSplit">--</div><div class="sub2" id="kSplitSub"></div></div>
+  <div class="card"><div class="lbl">Availability</div><div class="val c-blue" id="kAvail">--</div><div class="sub2" id="kPerfSub"></div></div>
+</div>
+
+<div class="grid">
+  <div class="panel"><h3>Line-wise Production vs NPT <span id="lineDateLbl" style="color:var(--blue)"></span></h3><div class="desc">Per line — Prod MT, NPT min, Loss MT</div><div class="chart sm"><canvas id="lineChart"></canvas></div><table class="k" style="margin-top:10px"><thead><tr><th>Line</th><th>Prod MT</th><th>NPT min</th><th>Freq</th><th>Loss MT</th></tr></thead><tbody id="lineBody"></tbody></table></div>
+  <div class="panel"><h3>Breakdown Type-wise NPT <span id="typeDateLbl" style="color:var(--amber)"></span></h3><div class="desc">Time + Loss MT per type</div><div class="chart sm"><canvas id="typeChart"></canvas></div><table class="k" style="margin-top:10px"><thead><tr><th>Type</th><th>Time</th><th>Freq</th><th>Loss MT</th></tr></thead><tbody id="typeBody"></tbody></table></div>
+  <div class="panel"><h3>Breakdown vs Downtime <span id="splitLbl" style="color:var(--violet)"></span></h3><div class="desc"><span class="pill bd">Breakdown</span> Mechanical+Electrical · <span class="pill dt">Downtime</span> Others</div><div class="chart sm" style="height:240px"><canvas id="splitChart"></canvas></div><table class="k" style="margin-top:10px"><thead><tr><th>Category</th><th>Time</th><th>Freq</th><th>Loss MT</th></tr></thead><tbody id="splitBody"></tbody></table></div>
+  <div class="panel"><h3>Pareto — NPT Type <span id="paretoLbl" style="color:var(--red)"></span></h3><div class="desc">Sorted by Time — 80/20</div><div class="chart sm"><canvas id="paretoChart"></canvas></div><div style="font-size:11px;color:var(--mut);margin-top:8px" id="paretoInsight"></div></div>
+  <div class="panel" style="border-left:4px solid var(--amber)"><h3>Top 3 Reasons <span id="top3Lbl" style="color:var(--amber)"></span></h3><div class="desc">Highest NPT by Name+Reason</div><div class="chart sm" style="height:220px"><canvas id="top3Chart"></canvas></div><table class="k" style="margin-top:10px"><thead><tr><th>#</th><th>Reason</th><th>Type</th><th>Line</th><th>Time</th><th>Loss</th><th>Freq</th></tr></thead><tbody id="top3Body"></tbody></table><div style="font-size:11px;color:var(--mut);margin-top:6px" id="top3Insight"></div></div>
+  <div class="panel" style="border-left:4px solid var(--red)"><h3>RM Shortage — All Reasons <span id="rmLbl" style="color:var(--red)"></span></h3><div class="desc">Every day — all RM reasons</div><div class="chart sm" style="height:220px"><canvas id="rmChart"></canvas></div><table class="k" style="margin-top:10px"><thead><tr><th>#</th><th>RM Reason</th><th>Line</th><th>Time</th><th>Loss</th><th>Freq</th></tr></thead><tbody id="rmBody"></tbody></table><div style="font-size:11px;color:var(--mut);margin-top:6px" id="rmInsight"></div></div>
+</div>
+
+<div class="panel" style="margin-top:14px; border-left:4px solid var(--teal)">
+  <h3>Monthly NPT Trend — Breakdown Type & Reason <span id="monthlyLbl" style="color:var(--teal)"></span></h3><div class="desc">Monthly total + stacked by type — month filter for table</div>
+  <div class="filterbar" style="margin-bottom:12px;background:var(--card2);border:none;padding:10px 12px"><div class="fgroup"><label>Select Month</label><select id="monthSel"></select></div><button class="btn" onclick="mPrev()">◀</button><button class="btn" onclick="mNext()">▶</button><span id="monthInfo" style="font-size:11px;color:var(--mut);margin-left:10px"></span></div>
+  <div class="grid"><div><div style="font-size:11px;color:var(--mut);font-weight:600;margin-bottom:6px">Monthly Total NPT (last 12)</div><div class="chart sm"><canvas id="monthlyTrend"></canvas></div></div><div><div style="font-size:11px;color:var(--mut);font-weight:600;margin-bottom:6px">Monthly by Type (stacked)</div><div class="chart sm"><canvas id="monthlyTypeChart"></canvas></div></div></div>
+  <div class="grid" style="margin-top:12px"><div><div style="font-size:11px;color:var(--mut);font-weight:600;margin-bottom:6px">Selected Month — Type-wise</div><table class="k"><thead><tr><th>Type</th><th>Time</th><th>Loss</th><th>Freq</th></tr></thead><tbody id="monthlyTypeBody"></tbody></table></div><div><div style="font-size:11px;color:var(--mut);font-weight:600;margin-bottom:6px">Selected Month — Top 5 Reasons</div><table class="k"><thead><tr><th>#</th><th>Reason</th><th>Time</th><th>Loss</th></tr></thead><tbody id="monthlyReasonBody"></tbody></table></div></div>
+  <div style="margin-top:12px"><div style="font-size:11px;color:var(--mut);font-weight:600;margin-bottom:6px">RM Shortage — Monthly All Reasons</div><table class="k"><thead><tr><th>#</th><th>RM Reason</th><th>Time</th><th>Loss</th><th>Freq</th></tr></thead><tbody id="monthlyRmBody"></tbody></table></div>
+</div>
+
+<div class="footer">AAFL Operational Excellence · FULL Fixed · <span id="err2" style="color:var(--red)"></span></div>
+
+<script>
+let DATA=null, LINES=[], selectedDate=''; let charts={};
+const LINECOLOR={"Cattle Line":'#34d399',"Poultry Line":'#38bdf8',"Layer Line":'#fbbf24',"Fish Line (Floating)":'#a78bfa',"Fish Line (Sinking)":'#f87171'};
+function fmt(n){return n==null?'--':Number(n).toLocaleString(undefined,{maximumFractionDigits:2})}
+function findByDate(d){return DATA.daily.find(x=>x.date===d)}
+function safeSet(id,val){ const el=document.getElementById(id); if(!el){ console.warn('missing id',id); return; } el.textContent=val; }
+function safeHtml(id,val){ const el=document.getElementById(id); if(!el){ console.warn('missing id',id); return; } el.innerHTML=val; }
+async function load(){
+  try{
+    const r=await fetch('npt_line_data.json?_='+Date.now());
+    if(!r.ok) throw new Error('http '+r.status);
+    DATA=await r.json();
+  }catch(e){
+    safeSet('err','Load failed '+e);
+    return;
+  }
+  safeSet('genStamp','Generated '+DATA.generated+' · '+DATA.daily.length+' days');
+  LINES=DATA.lines;
+  const sel=document.getElementById('dateSel'); sel.innerHTML='';
+  DATA.all_dates.forEach(d=> sel.add(new Option(d,d)));
+  sel.value=DATA.all_dates[DATA.all_dates.length-1];
+  selectedDate=sel.value;
+  document.getElementById('dateInput').value=selectedDate;
+  sel.onchange=()=>{ selectedDate=sel.value; document.getElementById('dateInput').value=selectedDate; render(); };
+  document.getElementById('dateInput').onchange=(e)=>{ selectedDate=e.target.value; if(!DATA.all_dates.includes(selectedDate)){ let b=DATA.all_dates[0]; for(let d of DATA.all_dates){ if(d<=selectedDate) b=d; else break; } selectedDate=b; } sel.value=selectedDate; document.getElementById('dateInput').value=selectedDate; render(); };
+  const mSel=document.getElementById('monthSel'); mSel.innerHTML=''; (DATA.monthly||[]).forEach(m=> mSel.add(new Option(m.month+' ('+m.ym+')', m.ym))); if(DATA.monthly&&DATA.monthly.length) mSel.value=DATA.monthly[DATA.monthly.length-1].ym; mSel.onchange=renderMonthly;
+  render(); renderMonthly();
+}
+function render(){
+  try{
+    const rec=findByDate(selectedDate); if(!rec){ safeSet('err','No data'); return; }
+    safeSet('err',''); safeSet('rangeLbl',selectedDate);
+    safeSet('lineDateLbl','('+selectedDate+')'); safeSet('typeDateLbl','('+selectedDate+')'); safeSet('splitLbl','('+selectedDate+')'); safeSet('paretoLbl','('+selectedDate+')'); safeSet('top3Lbl','('+selectedDate+')'); safeSet('rmLbl','('+selectedDate+')');
+    safeSet('kProd',fmt(rec.total_prod)+' MT'); safeSet('kNPT',fmt(rec.total_npt)+' min'); safeSet('kLoss',fmt(rec.total_loss)+' MT'); safeSet('kAvail', rec.availability!=null? rec.availability.toFixed(1)+'%' : '--');
+    safeSet('kProdSub',DATA.lines.length+' lines'); safeSet('kNPTSub',rec.total_freq+' events · '+(rec.total_npt/60).toFixed(1)+' hrs'); safeSet('kLossSub','Avg '+(rec.total_npt? (rec.total_loss/rec.total_npt*60).toFixed(2):'0')+' MT/Hr'); const sp=rec.split; safeHtml('kSplit','<span class="pill bd">'+fmt(sp.breakdown_time)+' min</span> <span class="pill dt" style="margin-left:6px">'+fmt(sp.downtime_time)+' min</span>'); safeSet('kSplitSub','BD loss '+fmt(sp.breakdown_loss)+' MT · DT loss '+fmt(sp.downtime_loss)+' MT'); safeSet('kPerfSub', rec.performance!=null? 'Perf '+rec.performance.toFixed(1)+'%' : '--');
+    let rows=''; LINES.forEach(l=>{ const x=rec.lines[l]||{prod:0,npt_time:0,npt_freq:0,loss_mt:0}; rows+=`<tr><td>${l}</td><td>${fmt(x.prod)}</td><td>${fmt(x.npt_time)}</td><td>${x.npt_freq}</td><td>${fmt(x.loss_mt)}</td></tr>`; }); safeHtml('lineBody',rows);
+    const types=Object.entries(rec.types).sort((a,b)=>b[1].time-a[1].time); let trows=''; types.forEach(([k,v])=>{ trows+=`<tr><td>${k}</td><td>${fmt(v.time)}</td><td>${v.freq}</td><td>${fmt(v.loss_mt)}</td></tr>`; }); safeHtml('typeBody',trows||'<tr><td colspan=4>No NPT</td></tr>');
+    safeHtml('splitBody',`<tr><td><span class="pill bd">Breakdown</span></td><td>${fmt(sp.breakdown_time)}</td><td>${sp.breakdown_freq}</td><td>${fmt(sp.breakdown_loss)}</td></tr><tr><td><span class="pill dt">Downtime</span></td><td>${fmt(sp.downtime_time)}</td><td>${sp.downtime_freq}</td><td>${fmt(sp.downtime_loss)}</td></tr>`);
+    Object.values(charts).forEach(c=>{try{c.destroy()}catch(e){}}); charts={};
+    if(typeof Chart!=='undefined'){
+      try{ charts.line=new Chart(document.getElementById('lineChart'),{type:'bar',data:{labels:LINES.map(l=>l.replace(' Line','')),datasets:[{label:'Prod MT',data:LINES.map(l=> (rec.lines[l]||{}).prod||0),backgroundColor:'rgba(52,211,153,.75)'},{label:'NPT min',data:LINES.map(l=> (rec.lines[l]||{}).npt_time||0),backgroundColor:'rgba(248,113,113,.7)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true}}}});}catch(e){console.error(e)}
+      try{ charts.type=new Chart(document.getElementById('typeChart'),{type:'bar',data:{labels:types.map(x=>x[0].slice(0,18)),datasets:[{label:'Time',data:types.map(x=>x[1].time),backgroundColor:'#fbbf24'}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}}}});}catch(e){}
+      try{ charts.split=new Chart(document.getElementById('splitChart'),{type:'doughnut',data:{labels:['Breakdown','Downtime'],datasets:[{data:[sp.breakdown_time||0,sp.downtime_time||0],backgroundColor:['#f87171','#38bdf8']}]},options:{responsive:true,maintainAspectRatio:false}});}catch(e){}
+      const total=types.reduce((a,x)=>a+x[1].time,0); let cum=0; const pv=types.map(x=>{cum+=x[1].time; return total? cum/total*100:0}); safeSet('paretoInsight', types.length? `Total ${fmt(total)} min · Top ${types[0][0]} ${(types[0][1].time/total*100).toFixed(1)}%` : ''); try{ charts.pareto=new Chart(document.getElementById('paretoChart'),{type:'bar',data:{labels:types.map(x=>x[0].slice(0,15)),datasets:[{type:'bar',label:'Time',data:types.map(x=>x[1].time),backgroundColor:'rgba(248,113,113,.7)'},{type:'line',label:'Cum %',data:pv,borderColor:'#fbbf24',yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y1:{position:'right',max:100,grid:{display:false}}}}});}catch(e){}
+      const top3=rec.top3||[]; let tr=''; top3.forEach((r,i)=>{ tr+=`<tr><td>${i+1}</td><td><b>${r.name}</b><br><span style="color:#94a3b8">${r.reason||''}</span></td><td>${r.type}</td><td>${r.line||''}</td><td>${fmt(r.time)}</td><td>${fmt(r.loss_mt)}</td><td>${r.freq}</td></tr>`; }); safeHtml('top3Body',tr||'<tr><td colspan=7>No data</td></tr>'); try{ charts.top3=new Chart(document.getElementById('top3Chart'),{type:'bar',data:{labels:top3.map(x=>x.name.slice(0,15)),datasets:[{label:'Time',data:top3.map(x=>x.time),backgroundColor:'#fbbf24'}]},options:{responsive:true,maintainAspectRatio:false}});}catch(e){}
+      const rm=rec.rm_reasons||[]; let rr=''; rm.forEach((r,i)=>{ rr+=`<tr><td>${i+1}</td><td><b>${r.name}</b><br><span style="color:#94a3b8">${r.reason||''}</span></td><td>${r.line||''}</td><td>${fmt(r.time)}</td><td>${fmt(r.loss_mt)}</td><td>${r.freq}</td></tr>`; }); safeHtml('rmBody',rr||'<tr><td colspan=6>No RM Shortage</td></tr>'); try{ if(rm.length) charts.rm=new Chart(document.getElementById('rmChart'),{type:'bar',data:{labels:rm.map(x=>x.reason.slice(0,12)),datasets:[{label:'Time',data:rm.map(x=>x.time),backgroundColor:'#f87171'}]},options:{responsive:true,maintainAspectRatio:false}});}catch(e){}
+    }
+    // trends
+    const idx=DATA.all_dates.indexOf(selectedDate); const start=Math.max(0,idx-13); const tDates=DATA.all_dates.slice(start, idx+1); const tRecs=tDates.map(d=>findByDate(d)); const _tl=document.getElementById('trendLbl'); if(_tl) _tl.textContent='('+tDates[0]+' → '+tDates[tDates.length-1]+')';
+    if(typeof Chart!=='undefined' && document.getElementById('trendProd') && document.getElementById('trendNPT')){
+      try{ const ds=LINES.map(l=>({label:l.replace(' Line',''),data:tRecs.map(r=> (r.lines[l]||{}).prod||0),borderColor:LINECOLOR[l],tension:.3})); charts.trendProd=new Chart(document.getElementById('trendProd'),{type:'line',data:{labels:tDates.map(d=>d.slice(5)),datasets:ds},options:{responsive:true,maintainAspectRatio:false}});}catch(e){}
+      try{ const ds=LINES.map(l=>({label:l.replace(' Line',''),data:tRecs.map(r=> (r.lines[l]||{}).npt_time||0),borderColor:LINECOLOR[l],tension:.3})); charts.trendNPT=new Chart(document.getElementById('trendNPT'),{type:'line',data:{labels:tDates.map(d=>d.slice(5)),datasets:ds},options:{responsive:true,maintainAspectRatio:false}});}catch(e){}
+    }
+  }catch(e){ safeSet('err','Render failed '+e.message); console.error(e); }
+}
+function renderMonthly(){
+  try{
+    if(!DATA.monthly) return; const ms=DATA.monthly.slice(-12); const selYm=document.getElementById('monthSel').value||ms[ms.length-1].ym; const sel=DATA.monthly.find(m=>m.ym===selYm)||ms[ms.length-1];
+    safeSet('monthlyLbl','('+ms[0].month+' → '+ms[ms.length-1].month+')'); safeSet('monthInfo', sel.month+' : NPT '+fmt(sel.total_npt)+' min · Loss '+fmt(sel.total_loss)+' MT');
+    safeHtml('monthlyTypeBody', Object.entries(sel.types).sort((a,b)=>b[1].time-a[1].time).map(([k,v])=>`<tr><td>${k}</td><td>${fmt(v.time)}</td><td>${fmt(v.loss_mt)}</td><td>${v.freq}</td></tr>`).join(''));
+    safeHtml('monthlyReasonBody', sel.top_reasons.map((r,i)=>`<tr><td>${i+1}</td><td><b>${r.name}</b><br><span style="color:#94a3b8">${r.reason||''}</span></td><td>${fmt(r.time)}</td><td>${fmt(r.loss_mt)}</td></tr>`).join('')||'<tr><td colspan=4>No data</td></tr>');
+    safeHtml('monthlyRmBody', sel.rm_reasons.length? sel.rm_reasons.map((r,i)=>`<tr><td>${i+1}</td><td><b>${r.name}</b><br><span style="color:#94a3b8">${r.reason||''}</span></td><td>${fmt(r.time)}</td><td>${fmt(r.loss_mt)}</td><td>${r.freq}</td></tr>`).join('') : '<tr><td colspan=5>No RM</td></tr>');
+    if(typeof Chart!=='undefined'){
+      try{ if(charts.monthlyTrend) charts.monthlyTrend.destroy(); charts.monthlyTrend=new Chart(document.getElementById('monthlyTrend'),{type:'line',data:{labels:ms.map(m=>m.month),datasets:[{label:'Total NPT',data:ms.map(m=>m.total_npt),borderColor:'#f87171',backgroundColor:'rgba(248,113,113,.15)',fill:true}]},options:{responsive:true,maintainAspectRatio:false}});}catch(e){}
+      try{ if(charts.monthlyType) charts.monthlyType.destroy(); const allT=[...new Set(ms.flatMap(m=>Object.keys(m.types)))]; const cols=['#f87171','#38bdf8','#fbbf24','#a78bfa','#34d399']; const ds=allT.map((t,i)=>({label:t,data:ms.map(m=> (m.types[t]||{time:0}).time),backgroundColor:cols[i%cols.length]})); charts.monthlyType=new Chart(document.getElementById('monthlyTypeChart'),{type:'bar',data:{labels:ms.map(m=>m.month),datasets:ds},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true}}}});}catch(e){}
+    }
+  }catch(e){ console.error(e); }
+}
+function prev(){ const s=document.getElementById('dateSel'); if(s.selectedIndex>0){s.selectedIndex--; selectedDate=s.value; document.getElementById('dateInput').value=selectedDate; render();} }
+function next(){ const s=document.getElementById('dateSel'); if(s.selectedIndex < s.options.length-1){s.selectedIndex++; selectedDate=s.value; document.getElementById('dateInput').value=selectedDate; render();} }
+function today(){ const s=document.getElementById('dateSel'); s.value=DATA.all_dates[DATA.all_dates.length-1]; selectedDate=s.value; document.getElementById('dateInput').value=selectedDate; render(); }
+function mPrev(){ const s=document.getElementById('monthSel'); if(s.selectedIndex>0){s.selectedIndex--; renderMonthly();} }
+function mNext(){ const s=document.getElementById('monthSel'); if(s.selectedIndex < s.options.length-1){s.selectedIndex++; renderMonthly();} }
+load();
+</script>
+</body></html>
