@@ -1,0 +1,41 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Upload AAFL Photo & Logo</title><style>body{font-family:'Segoe UI',Arial,sans-serif;background:#eef1f6;padding:30px} .card{background:#fff;border:1px solid #dde3ee;border-radius:8px;max-width:600px;margin:0 auto;padding:24px} h2{color:#0b2545} .drop{border:2px dashed #1f6fd6;border-radius:8px;padding:20px;text-align:center;background:#f8fafc;margin:12px 0} input{margin:8px 0} button{background:#0b2545;color:#fff;border:none;padding:10px 18px;border-radius:6px;cursor:pointer} button:hover{background:#13315c} .ok{color:#1f8a53} .err{color:#c8402c} img{max-width:120px;max-height:120px;border-radius:6px;border:1px solid #dde3ee}</style></head><body>
+<div class="card">
+<h2>AAFL — Upload Photo & Logo</h2>
+<p>Add your photo where <b>AAFL</b> appears (avatar 90×90). Logo where <b>AKIJ RESOURCE</b> appears.</p>
+
+<div class="drop">
+<h3>1. Your Photo (portrait)</h3>
+<input type="file" id="photo" accept="image/*">
+<div id="photoPrev"></div>
+<button onclick="upload('photo','photo.jpg')">Upload Photo</button>
+<div id="photoMsg"></div>
+</div>
+
+<div class="drop">
+<h3>2. Company Logo (AKIJ RESOURCE)</h3>
+<input type="file" id="logo" accept="image/*">
+<div id="logoPrev"></div>
+<button onclick="upload('logo','Logo.png')">Upload Logo</button>
+<div id="logoMsg"></div>
+</div>
+
+<p><a href="/">← Back to Dashboard</a> | <a href="/api/health">Health</a></p>
+</div>
+<script>
+function preview(id, prevId){ const f=document.getElementById(id).files[0]; if(!f) return; const r=new FileReader(); r.onload=e=> document.getElementById(prevId).innerHTML='<img src="'+e.target.result+'"><div>'+f.name+' '+(f.size/1024).toFixed(1)+' KB</div>'; r.readAsDataURL(f); }
+document.getElementById('photo').addEventListener('change',()=>preview('photo','photoPrev'));
+document.getElementById('logo').addEventListener('change',()=>preview('logo','logoPrev'));
+async function upload(inputId, filename){
+  const f=document.getElementById(inputId).files[0];
+  if(!f){ document.getElementById(inputId+'Msg').innerHTML='<span class=err>Select a file first</span>'; return; }
+  const r=new FileReader();
+  r.onload=async e=>{
+    const b64=e.target.result;
+    const res=await fetch('/api/save-image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({filename, data:b64})});
+    const j=await res.json();
+    document.getElementById(inputId+'Msg').innerHTML = j.ok ? '<span class=ok>✓ Saved as '+filename+' ('+j.size+' bytes) — refresh dashboard</span>' : '<span class=err>✗ '+j.error+'</span>';
+  };
+  r.readAsDataURL(f);
+}
+</script>
+</body></html>
