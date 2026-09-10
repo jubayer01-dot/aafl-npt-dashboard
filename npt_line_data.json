@@ -8,127 +8,6 @@
  ],
  "daily": [
   {
-   "date": "2025-08-28",
-   "total_prod": 333.32,
-   "total_npt": 2075.0,
-   "total_loss": 191.58,
-   "total_freq": 18,
-   "lines": {
-    "Cattle Line": {
-     "prod": 59.42,
-     "npt_time": 260.0,
-     "npt_freq": 5,
-     "loss_mt": 27.5
-    },
-    "Fish Line (Floating)": {
-     "prod": 11.15,
-     "npt_time": 480.0,
-     "npt_freq": 2,
-     "loss_mt": 52.0
-    },
-    "Fish Line (Sinking)": {
-     "prod": 35.25,
-     "npt_time": 610.0,
-     "npt_freq": 3,
-     "loss_mt": 33.0
-    },
-    "Layer Line": {
-     "prod": 162.0,
-     "npt_time": 280.0,
-     "npt_freq": 2,
-     "loss_mt": 42.0
-    },
-    "Poultry Line": {
-     "prod": 65.5,
-     "npt_time": 445.0,
-     "npt_freq": 6,
-     "loss_mt": 37.08
-    }
-   },
-   "types": {
-    "Mechanical Breakdown": {
-     "time": 350.0,
-     "freq": 4,
-     "loss_mt": 31.5
-    },
-    "Others down time": {
-     "time": 80.0,
-     "freq": 1,
-     "loss_mt": 6.67
-    },
-    "Raw Material Shortage": {
-     "time": 365.0,
-     "freq": 5,
-     "loss_mt": 50.58
-    },
-    "Planned Down Time": {
-     "time": 460.0,
-     "freq": 1,
-     "loss_mt": 49.83
-    },
-    "In Process Setup/ Adjustment": {
-     "time": 820.0,
-     "freq": 7,
-     "loss_mt": 53.0
-    }
-   },
-   "split": {
-    "breakdown_time": 350.0,
-    "downtime_time": 1725.0,
-    "breakdown_loss": 31.5,
-    "downtime_loss": 160.08,
-    "breakdown_freq": 4,
-    "downtime_freq": 14
-   },
-   "top3": [
-    {
-     "name": "I01-In Process Setup/ Adjustment Die Change",
-     "reason": "I01-Iteam Change",
-     "type": "In Process Setup/ Adjustment",
-     "line": "Fish Line (Sinking)",
-     "time": 820.0,
-     "loss_mt": 53.0,
-     "freq": 7
-    },
-    {
-     "name": "P01-Planned Down Time (Min) Preventive Maintenance",
-     "reason": "P01-Scheduled machine check-up",
-     "type": "Planned Down Time",
-     "line": "Fish Line (Floating)",
-     "time": 460.0,
-     "loss_mt": 49.83,
-     "freq": 1
-    },
-    {
-     "name": "R01-Raw Material RM Shortage",
-     "reason": "R01-RM shortage",
-     "type": "Raw Material Shortage",
-     "line": "Layer Line",
-     "time": 345.0,
-     "loss_mt": 48.92,
-     "freq": 4
-    }
-   ],
-   "rm_reasons": [
-    {
-     "name": "R01-Raw Material RM Shortage",
-     "reason": "R01-RM shortage",
-     "line": "Layer Line",
-     "time": 345.0,
-     "loss_mt": 48.92,
-     "freq": 4
-    },
-    {
-     "name": "R01-Raw Material RM Shortage",
-     "reason": "R01-Batching Delay",
-     "line": "Poultry Line",
-     "time": 20.0,
-     "loss_mt": 1.67,
-     "freq": 1
-    }
-   ]
-  },
-  {
    "date": "2025-08-29",
    "total_prod": 336.8,
    "total_npt": 3166.0,
@@ -41432,14 +41311,9 @@
      "loss_mt": 27.0
     },
     "Planned Down Time": {
-     "time": 660.0,
-     "freq": 2,
-     "loss_mt": 92.0
-    },
-    "Mechanical Breakdown": {
-     "time": 340.0,
-     "freq": 2,
-     "loss_mt": 31.17
+     "time": 1000.0,
+     "freq": 4,
+     "loss_mt": 123.17
     },
     "Others down time": {
      "time": 70.0,
@@ -41448,12 +41322,12 @@
     }
    },
    "split": {
-    "breakdown_time": 340.0,
-    "downtime_time": 1760.0,
-    "breakdown_loss": 31.17,
-    "downtime_loss": 208.93,
-    "breakdown_freq": 2,
-    "downtime_freq": 20
+    "breakdown_time": 0,
+    "downtime_time": 2100.0,
+    "breakdown_loss": 0.0,
+    "downtime_loss": 240.1,
+    "breakdown_freq": 0,
+    "downtime_freq": 22
    },
    "top3": [
     {
@@ -41485,7 +41359,7 @@
     }
    ],
    "rm_reasons": [],
-   "availability": 77.98,
+   "availability": 82.26,
    "performance": 65.96
   },
   {
@@ -41763,9 +41637,9 @@
    },
    "types": {
     "Planned Down Time": {
-     "time": 2520.0,
-     "freq": 6,
-     "loss_mt": 303.5
+     "time": 2840.0,
+     "freq": 7,
+     "loss_mt": 340.83
     },
     "In Process Setup/ Adjustment": {
      "time": 160.0,
@@ -41776,20 +41650,15 @@
      "time": 480.0,
      "freq": 1,
      "loss_mt": 56.0
-    },
-    "Mechanical Breakdown": {
-     "time": 320.0,
-     "freq": 1,
-     "loss_mt": 37.33
     }
    },
    "split": {
-    "breakdown_time": 320.0,
-    "downtime_time": 3160.0,
-    "breakdown_loss": 37.33,
-    "downtime_loss": 374.33,
-    "breakdown_freq": 1,
-    "downtime_freq": 10
+    "breakdown_time": 0,
+    "downtime_time": 3480.0,
+    "breakdown_loss": 0.0,
+    "downtime_loss": 411.67,
+    "breakdown_freq": 0,
+    "downtime_freq": 11
    },
    "top3": [
     {
@@ -41830,7 +41699,7 @@
      "freq": 1
     }
    ],
-   "availability": 57.89,
+   "availability": 67.35,
    "performance": 80.98
   },
   {
@@ -41883,14 +41752,14 @@
      "loss_mt": 105.0
     },
     "Planned Down Time": {
-     "time": 1440.0,
-     "freq": 3,
-     "loss_mt": 216.0
+     "time": 1470.0,
+     "freq": 4,
+     "loss_mt": 219.25
     },
     "Mechanical Breakdown": {
-     "time": 140.0,
-     "freq": 3,
-     "loss_mt": 8.75
+     "time": 110.0,
+     "freq": 2,
+     "loss_mt": 5.5
     },
     "REB Shutdown": {
      "time": 250.0,
@@ -41914,12 +41783,12 @@
     }
    },
    "split": {
-    "breakdown_time": 160.0,
-    "downtime_time": 3200.0,
-    "breakdown_loss": 11.08,
-    "downtime_loss": 401.83,
-    "breakdown_freq": 4,
-    "downtime_freq": 23
+    "breakdown_time": 130.0,
+    "downtime_time": 3230.0,
+    "breakdown_loss": 7.83,
+    "downtime_loss": 405.08,
+    "breakdown_freq": 3,
+    "downtime_freq": 24
    },
    "top3": [
     {
@@ -41960,7 +41829,7 @@
      "freq": 2
     }
    ],
-   "availability": 66.67,
+   "availability": 67.02,
    "performance": 81.07
   },
   {
@@ -42003,9 +41872,9 @@
    },
    "types": {
     "Mechanical Breakdown": {
-     "time": 580.0,
-     "freq": 3,
-     "loss_mt": 49.67
+     "time": 510.0,
+     "freq": 2,
+     "loss_mt": 41.5
     },
     "Others down time": {
      "time": 150.0,
@@ -42013,9 +41882,9 @@
      "loss_mt": 19.5
     },
     "Planned Down Time": {
-     "time": 570.0,
-     "freq": 2,
-     "loss_mt": 85.5
+     "time": 640.0,
+     "freq": 3,
+     "loss_mt": 93.67
     },
     "In Process Setup/ Adjustment": {
      "time": 720.0,
@@ -42034,12 +41903,12 @@
     }
    },
    "split": {
-    "breakdown_time": 580.0,
-    "downtime_time": 2240.0,
-    "breakdown_loss": 49.67,
-    "downtime_loss": 279.58,
-    "breakdown_freq": 3,
-    "downtime_freq": 28
+    "breakdown_time": 510.0,
+    "downtime_time": 2310.0,
+    "breakdown_loss": 41.5,
+    "downtime_loss": 287.75,
+    "breakdown_freq": 2,
+    "downtime_freq": 29
    },
    "top3": [
     {
@@ -42071,7 +41940,7 @@
     }
    ],
    "rm_reasons": [],
-   "availability": 66.06,
+   "availability": 66.77,
    "performance": 74.35
   },
   {
@@ -42201,50 +42070,151 @@
    ],
    "availability": 67.04,
    "performance": 66.06
+  },
+  {
+   "date": "2026-09-09",
+   "total_prod": 429.67,
+   "total_npt": 1350.0,
+   "total_loss": 157.58,
+   "total_freq": 24,
+   "lines": {
+    "Cattle Line": {
+     "prod": 71.5,
+     "npt_time": 210.0,
+     "npt_freq": 3,
+     "loss_mt": 24.0
+    },
+    "Fish Line (Floating)": {
+     "prod": 73.97,
+     "npt_time": 310.0,
+     "npt_freq": 5,
+     "loss_mt": 24.92
+    },
+    "Fish Line (Sinking)": {
+     "prod": 91.5,
+     "npt_time": 310.0,
+     "npt_freq": 4,
+     "loss_mt": 51.5
+    },
+    "Layer Line": {
+     "prod": 107.8,
+     "npt_time": 240.0,
+     "npt_freq": 5,
+     "loss_mt": 35.0
+    },
+    "Poultry Line": {
+     "prod": 84.9,
+     "npt_time": 280.0,
+     "npt_freq": 7,
+     "loss_mt": 22.17
+    }
+   },
+   "types": {
+    "Others down time": {
+     "time": 60.0,
+     "freq": 1,
+     "loss_mt": 5.0
+    },
+    "REB Shutdown": {
+     "time": 580.0,
+     "freq": 5,
+     "loss_mt": 68.08
+    },
+    "In Process Setup/ Adjustment": {
+     "time": 600.0,
+     "freq": 15,
+     "loss_mt": 66.5
+    },
+    "Production Problems": {
+     "time": 110.0,
+     "freq": 3,
+     "loss_mt": 18.0
+    }
+   },
+   "split": {
+    "breakdown_time": 0,
+    "downtime_time": 1350.0,
+    "breakdown_loss": 0.0,
+    "downtime_loss": 157.58,
+    "breakdown_freq": 0,
+    "downtime_freq": 24
+   },
+   "top3": [
+    {
+     "name": "C01-REB Shutdown",
+     "reason": "C01-REB Shutdown",
+     "type": "REB Shutdown",
+     "line": "Fish Line (Floating)",
+     "time": 580.0,
+     "loss_mt": 68.08,
+     "freq": 5
+    },
+    {
+     "name": "I01-Item Change",
+     "reason": "I01-Item Change with Same Die",
+     "type": "In Process Setup/ Adjustment",
+     "line": "Cattle Line",
+     "time": 410.0,
+     "loss_mt": 42.33,
+     "freq": 12
+    },
+    {
+     "name": "P02-Bin Empty",
+     "reason": "P02-Pre-Mixer Bin Empty",
+     "type": "Production Problems",
+     "line": "Fish Line (Sinking)",
+     "time": 110.0,
+     "loss_mt": 18.0,
+     "freq": 3
+    }
+   ],
+   "rm_reasons": [],
+   "availability": 81.25,
+   "performance": 66.84
   }
  ],
  "monthly": [
   {
    "month": "Aug-25",
    "ym": "2025-08",
-   "total_npt": 12441.0,
-   "total_loss": 1290.21,
-   "total_freq": 108,
+   "total_npt": 10366.0,
+   "total_loss": 1098.63,
+   "total_freq": 90,
    "types": {
     "In Process Setup/ Adjustment": {
-     "time": 4360.0,
-     "loss_mt": 406.57,
-     "freq": 41
+     "time": 3540.0,
+     "loss_mt": 353.57,
+     "freq": 34
     },
     "Mechanical Breakdown": {
-     "time": 2560.0,
-     "loss_mt": 224.2,
-     "freq": 15
+     "time": 2210.0,
+     "loss_mt": 192.7,
+     "freq": 11
     },
     "Raw Material Shortage": {
-     "time": 2111.0,
-     "loss_mt": 247.73,
-     "freq": 28
+     "time": 1746.0,
+     "loss_mt": 197.15,
+     "freq": 23
     },
     "Others down time": {
-     "time": 1295.0,
-     "loss_mt": 183.09,
-     "freq": 6
+     "time": 1215.0,
+     "loss_mt": 176.42,
+     "freq": 5
     },
     "REB Shutdown": {
      "time": 1215.0,
      "loss_mt": 118.54,
      "freq": 12
     },
-    "Planned Down Time": {
-     "time": 490.0,
-     "loss_mt": 53.08,
-     "freq": 2
-    },
     "Warehouse block": {
      "time": 370.0,
      "loss_mt": 52.58,
      "freq": 2
+    },
+    "Planned Down Time": {
+     "time": 30.0,
+     "loss_mt": 3.25,
+     "freq": 1
     },
     "Unavailable Order": {
      "time": 30.0,
@@ -42259,15 +42229,6 @@
    },
    "top_reasons": [
     {
-     "name": "I01-In Process Setup/ Adjustment Die Change",
-     "reason": "I01-Iteam Change",
-     "type": "In Process Setup/ Adjustment",
-     "line": "Fish Line (Floating)",
-     "time": 1990.0,
-     "loss_mt": 160.77,
-     "freq": 19
-    },
-    {
      "name": "I01-In Process Setup/ Adjustment Iteam Change",
      "reason": "I01-Iteam Change",
      "type": "In Process Setup/ Adjustment",
@@ -42277,15 +42238,6 @@
      "freq": 19
     },
     {
-     "name": "R01-Raw Material RM Shortage",
-     "reason": "R01-RM shortage",
-     "type": "Raw Material Shortage",
-     "line": "Poultry Line",
-     "time": 1416.0,
-     "loss_mt": 170.74,
-     "freq": 17
-    },
-    {
      "name": "C01-REB shut Down REB failure",
      "reason": "C01-REB failure",
      "type": "REB Shutdown",
@@ -42293,6 +42245,24 @@
      "time": 1215.0,
      "loss_mt": 118.53,
      "freq": 12
+    },
+    {
+     "name": "I01-In Process Setup/ Adjustment Die Change",
+     "reason": "I01-Iteam Change",
+     "type": "In Process Setup/ Adjustment",
+     "line": "Fish Line (Floating)",
+     "time": 1170.0,
+     "loss_mt": 107.77,
+     "freq": 12
+    },
+    {
+     "name": "R01-Raw Material RM Shortage",
+     "reason": "R01-RM shortage",
+     "type": "Raw Material Shortage",
+     "line": "Poultry Line",
+     "time": 1071.0,
+     "loss_mt": 121.82,
+     "freq": 13
     },
     {
      "name": "O01-Others down time  Bag shortage in packing section",
@@ -42309,9 +42279,9 @@
      "name": "R01-Raw Material RM Shortage",
      "reason": "R01-RM shortage",
      "line": "Poultry Line",
-     "time": 1416.0,
-     "loss_mt": 170.74,
-     "freq": 17
+     "time": 1071.0,
+     "loss_mt": 121.82,
+     "freq": 13
     },
     {
      "name": "R01-Raw Material RM Shortage",
@@ -42325,9 +42295,9 @@
      "name": "R01-Raw Material RM Shortage",
      "reason": "R01-Batching Delay",
      "line": "Poultry Line",
-     "time": 180.0,
-     "loss_mt": 20.5,
-     "freq": 3
+     "time": 160.0,
+     "loss_mt": 18.83,
+     "freq": 2
     }
    ]
   },
@@ -44063,19 +44033,19 @@
   {
    "month": "Sep-26",
    "ym": "2026-09",
-   "total_npt": 21613.0,
-   "total_loss": 2569.18,
-   "total_freq": 193,
+   "total_npt": 22963.0,
+   "total_loss": 2726.76,
+   "total_freq": 217,
    "types": {
     "Planned Down Time": {
-     "time": 7135.0,
-     "loss_mt": 969.58,
-     "freq": 22
+     "time": 7895.0,
+     "loss_mt": 1049.5,
+     "freq": 27
     },
     "In Process Setup/ Adjustment": {
-     "time": 5005.0,
-     "loss_mt": 516.22,
-     "freq": 98
+     "time": 5605.0,
+     "loss_mt": 582.72,
+     "freq": 113
     },
     "Raw Material Shortage": {
      "time": 3613.0,
@@ -44083,24 +44053,24 @@
      "freq": 11
     },
     "REB Shutdown": {
-     "time": 1940.0,
-     "loss_mt": 212.62,
-     "freq": 26
-    },
-    "Mechanical Breakdown": {
-     "time": 1560.0,
-     "loss_mt": 139.92,
-     "freq": 12
+     "time": 2520.0,
+     "loss_mt": 280.7,
+     "freq": 31
     },
     "Production Problems": {
-     "time": 990.0,
-     "loss_mt": 138.34,
-     "freq": 8
+     "time": 1100.0,
+     "loss_mt": 156.34,
+     "freq": 11
+    },
+    "Mechanical Breakdown": {
+     "time": 800.0,
+     "loss_mt": 60.0,
+     "freq": 7
     },
     "Others down time": {
-     "time": 720.0,
-     "loss_mt": 86.58,
-     "freq": 12
+     "time": 780.0,
+     "loss_mt": 91.58,
+     "freq": 13
     },
     "Warehouse block": {
      "time": 630.0,
@@ -44136,10 +44106,19 @@
      "name": "I01-Item Change",
      "reason": "I01-Item Change with Same Die",
      "type": "In Process Setup/ Adjustment",
+     "line": "Cattle Line",
+     "time": 3015.0,
+     "loss_mt": 313.18,
+     "freq": 76
+    },
+    {
+     "name": "C01-REB Shutdown",
+     "reason": "C01-REB Shutdown",
+     "type": "REB Shutdown",
      "line": "Fish Line (Floating)",
-     "time": 2605.0,
-     "loss_mt": 270.85,
-     "freq": 64
+     "time": 2520.0,
+     "loss_mt": 280.69,
+     "freq": 31
     },
     {
      "name": "P01-Planned Downtime",
@@ -44149,15 +44128,6 @@
      "time": 2040.0,
      "loss_mt": 231.5,
      "freq": 5
-    },
-    {
-     "name": "C01-REB Shutdown",
-     "reason": "C01-REB Shutdown",
-     "type": "REB Shutdown",
-     "line": "Fish Line (Floating)",
-     "time": 1940.0,
-     "loss_mt": 212.61,
-     "freq": 26
     }
    ],
    "rm_reasons": [
@@ -44181,7 +44151,6 @@
   }
  ],
  "all_dates": [
-  "2025-08-28",
   "2025-08-29",
   "2025-08-30",
   "2025-08-31",
@@ -44545,7 +44514,8 @@
   "2026-09-05",
   "2026-09-06",
   "2026-09-07",
-  "2026-09-08"
+  "2026-09-08",
+  "2026-09-09"
  ],
  "all_months": [
   "2025-08",
@@ -44563,7 +44533,7 @@
   "2026-08",
   "2026-09"
  ],
- "generated": "2026-09-09 19:10",
+ "generated": "2026-09-10 11:45",
  "line_avg_mtph": {
   "Poultry Line": 5.39,
   "Layer Line": 7.26,
